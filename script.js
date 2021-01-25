@@ -1,21 +1,23 @@
 let step = 0;
 let path = 0;
 let dotSize = 1;
-let colour = 0;
-let saturation = 0;
-let bigSaturation = 50;
+let colourStart = 160;
+let colour = colourStart;
+let colourRange = 100;
+let bigSaturation = 100;
+let littleSaturation = 0;
 let brightness = 100;
-let bigAlpha = 0.15;
-let littleAlpha = 0.2;
+let bigAlpha = 0.16;
+let littleAlpha = 0.3;
 
 let xPadding = 0;
 let yPadding = 0;
-const yShift = -900;
+const yShift = -700;
 const xShift = -300;
 const maxWidth = 500;
 const maxHeight = 500;
 let scale = 1;
-let speed = 10;
+let speed = 5;
 let paths;
 
 function preload() {
@@ -35,34 +37,36 @@ function setup() {
   frameRate(60);
   paths = shuffle(data.paths);
   console.log("paths", paths);
+  // blendMode(EXCLUSION);
 }
 
 function draw() {
   if (paths[path]) {
     if (step <= paths[path].points.length - speed) {
-      if (paths[path].points[step])
-        for (let i = 0; i < speed; i++) {
+      for (let i = 0; i < speed; i++) {
+        if (paths[path].points[step]) {
           fill(colour, bigSaturation, brightness, bigAlpha);
           circle(
             xPadding + paths[path].points[step][0] * scale + xShift,
             yPadding + paths[path].points[step][1] * scale + yShift,
             dotSize * 3
           );
-          fill(colour, saturation, brightness, littleAlpha);
+          fill(colour, littleSaturation, brightness, littleAlpha);
           circle(
             xPadding + paths[path].points[step][0] * scale + xShift,
             yPadding + paths[path].points[step][1] * scale + yShift,
             dotSize
           );
           step++;
-          colour += 360 / paths[path].points.length;
+          colour += colourRange / paths[path].points.length;
         }
+      }
       // console.log("step ", step);
     } else {
       console.log("path is ", path, " and movement length is ", paths.length);
       if (path <= paths.length) {
         step = 0;
-        colour = 0;
+        colour = colourStart;
         path++;
         // colour += path * 2;
         console.log("colour", colour);

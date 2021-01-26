@@ -3,27 +3,33 @@ let path = 0;
 let dotSize = 1;
 let colourStart = 160;
 let colour = colourStart;
-let colourRange = 100;
-let bigSaturation = 100;
+let colourRange = 60;
+let bigSaturation = 10;
 let littleSaturation = 0;
 let brightness = 100;
-let bigAlpha = 0.16;
-let littleAlpha = 0.3;
+let bigAlpha = 0.05;
+let littleAlpha = 0.15;
 
 let xPadding = 0;
 let yPadding = 0;
-const yShift = -700;
+const yShift = -600;
 const xShift = -300;
+const imageWidth = 1000;
+const imageHeight = 1000;
 const maxWidth = 500;
 const maxHeight = 500;
 let scale = 1;
-let speed = 5;
+let speed = 10;
 let paths;
+
+let map;
 
 function preload() {
   // Get the most recent earthquake in the database
   let url = "./paths/allsofar.json";
   data = loadJSON(url, "json");
+
+  map = loadImage("images/map-01.png");
 }
 
 function setup() {
@@ -32,12 +38,19 @@ function setup() {
   xPadding = (width - scale * maxWidth) / 2;
   yPadding = (height - scale * maxHeight) / 2;
   colorMode(HSB);
-  background(0, 0, 6);
+  background(0, 0, 5.5);
   noStroke();
   frameRate(60);
   paths = shuffle(data.paths);
-  console.log("paths", paths);
+  // console.log("paths", paths);
   // blendMode(EXCLUSION);
+  image(
+    map,
+    xPadding + xShift,
+    yPadding + yShift,
+    imageWidth * scale,
+    imageHeight * scale
+  );
 }
 
 function draw() {

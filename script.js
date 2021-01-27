@@ -1,3 +1,4 @@
+let go = false;
 let step = 0;
 let path = 0;
 let dotSize = 1;
@@ -12,24 +13,37 @@ let littleAlpha = 0.15;
 
 let xPadding = 0;
 let yPadding = 0;
-const yShift = -600;
+const yShift = -400;
 const xShift = -300;
 const imageWidth = 1000;
 const imageHeight = 1000;
 const maxWidth = 500;
 const maxHeight = 500;
 let scale = 1;
-let speed = 10;
-let paths;
+let speed = 20;
+let paths = [];
+
+// multiple graphics with text
+// https://github.com/processing/p5.js/wiki/Global-and-instance-mode
+
+let pathName = "pathname";
 
 let map;
 
 function preload() {
   // Get the most recent earthquake in the database
-  let url = "./paths/allsofar.json";
-  data = loadJSON(url, "json");
+  loadJSON("./paths/paths1.json", "json", addData);
+  loadJSON("./paths/paths2.json", "json", addData);
+  loadJSON("./paths/paths3.json", "json", addData);
+  loadJSON("./paths/paths4.json", "json", addData);
+  loadJSON("./paths/paths5.json", "json", addData);
 
   map = loadImage("images/map-01.png");
+}
+
+function addData(data) {
+  paths.push(...shuffle(data.paths));
+  go = true;
 }
 
 function setup() {
@@ -41,7 +55,7 @@ function setup() {
   background(0, 0, 5.5);
   noStroke();
   frameRate(60);
-  paths = shuffle(data.paths);
+
   // console.log("paths", paths);
   // blendMode(EXCLUSION);
   image(
@@ -51,11 +65,19 @@ function setup() {
     imageWidth * scale,
     imageHeight * scale
   );
+
+  // make other
+  textFont("IBM Plex Mono");
 }
 
 function draw() {
+  if (go) drawPaths();
+}
+
+function drawPaths() {
   if (paths[path]) {
     if (step <= paths[path].points.length - speed) {
+      // text(paths[path].name, 10, 10, 70, 80);
       for (let i = 0; i < speed; i++) {
         if (paths[path].points[step]) {
           fill(colour, bigSaturation, brightness, bigAlpha);

@@ -69,10 +69,10 @@ function setup() {
   // make UI
   fill(255);
   textFont("IBM Plex Mono");
-  textSize(14);
+  textSize(24);
   text("Drop in the Ocean", 10, 40);
   // text("Each point is a drop on one da4", 10, 40);
-  slider = createSlider(0, 300, 1);
+  slider = createSlider(1, 100, 1);
   slider.addClass("slider");
 }
 

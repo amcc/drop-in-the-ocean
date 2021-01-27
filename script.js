@@ -5,11 +5,11 @@ let dotSize = 1;
 let colourStart = 160;
 let colour = colourStart;
 let colourRange = 60;
-let bigSaturation = 10;
-let littleSaturation = 0;
+let bigSaturation = 0;
+let littleSaturation = 50;
 let brightness = 100;
-let bigAlpha = 0.05;
-let littleAlpha = 0.15;
+let bigAlpha = 0.03;
+let littleAlpha = 0.1;
 
 let xPadding = 0;
 let yPadding = 0;
@@ -66,12 +66,19 @@ function setup() {
     imageHeight * scale
   );
 
-  // make other
+  // make UI
+  fill(255);
   textFont("IBM Plex Mono");
+  textSize(14);
+  text("Drop in the Ocean", 10, 40);
+  // text("Each point is a drop on one da4", 10, 40);
+  slider = createSlider(0, 300, 1);
+  slider.addClass("slider");
 }
 
 function draw() {
   if (go) drawPaths();
+  speed = slider.value();
 }
 
 function drawPaths() {
@@ -80,17 +87,18 @@ function drawPaths() {
       // text(paths[path].name, 10, 10, 70, 80);
       for (let i = 0; i < speed; i++) {
         if (paths[path].points[step]) {
+          let thisDot = dotSize;
           fill(colour, bigSaturation, brightness, bigAlpha);
           circle(
             xPadding + paths[path].points[step][0] * scale + xShift,
             yPadding + paths[path].points[step][1] * scale + yShift,
-            dotSize * 3
+            thisDot * 3
           );
           fill(colour, littleSaturation, brightness, littleAlpha);
           circle(
             xPadding + paths[path].points[step][0] * scale + xShift,
             yPadding + paths[path].points[step][1] * scale + yShift,
-            dotSize
+            thisDot
           );
           step++;
           colour += colourRange / paths[path].points.length;

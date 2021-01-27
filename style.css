@@ -4,7 +4,21 @@ body {
   padding: 0;
   background: #000;
   font-family: "IBM Plex Mono", monospace;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  /* flex-direction: row-reverse; */
 }
 canvas {
   display: block;
+}
+.slider {
+  position: absolute;
+  bottom: 20px;
+  left: 10px;
+  z-index: 10;
+}
+section {
+  margin-top: 20px;
+  color: white;
+  padding: 10px;
 }

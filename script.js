@@ -8,8 +8,8 @@ let colourRange = 60;
 let bigSaturation = 10;
 let littleSaturation = 0;
 let brightness = 100;
-let bigAlpha = 0.05;
-let littleAlpha = 0.15;
+let bigAlpha = 0.03;
+let littleAlpha = 0.1;
 
 let xPadding = 0;
 let yPadding = 0;
@@ -80,17 +80,22 @@ function drawPaths() {
       // text(paths[path].name, 10, 10, 70, 80);
       for (let i = 0; i < speed; i++) {
         if (paths[path].points[step]) {
-          fill(colour, bigSaturation, brightness, bigAlpha);
+          let thisDot = dotSize;
+          step === 0
+            ? (fill(colourStart, 100, 100, bigAlpha), (thisDot = dotSize * 3))
+            : fill(colour, bigSaturation, brightness, bigAlpha);
           circle(
             xPadding + paths[path].points[step][0] * scale + xShift,
             yPadding + paths[path].points[step][1] * scale + yShift,
-            dotSize * 3
+            thisDot * 3
           );
-          fill(colour, littleSaturation, brightness, littleAlpha);
+          step === 0
+            ? fill(colourStart, 100, 100, littleAlpha)
+            : fill(colour, littleSaturation, brightness, littleAlpha);
           circle(
             xPadding + paths[path].points[step][0] * scale + xShift,
             yPadding + paths[path].points[step][1] * scale + yShift,
-            dotSize
+            thisDot
           );
           step++;
           colour += colourRange / paths[path].points.length;

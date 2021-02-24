@@ -32,11 +32,14 @@ let map;
 
 function preload() {
   // Get the most recent earthquake in the database
-  loadJSON("./paths/paths1.json", "json", addData);
-  loadJSON("./paths/paths2.json", "json", addData);
-  loadJSON("./paths/paths3.json", "json", addData);
-  loadJSON("./paths/paths4.json", "json", addData);
-  loadJSON("./paths/paths5.json", "json", addData);
+  loadJSON("./paths/all/plots1.json", "json", addData);
+  loadJSON("./paths/all/plots2.json", "json", addData);
+  loadJSON("./paths/all/plots3.json", "json", addData);
+  loadJSON("./paths/all/plots4.json", "json", addData);
+  loadJSON("./paths/all/plots5.json", "json", addData);
+  loadJSON("./paths/all/plots6.json", "json", addData);
+  loadJSON("./paths/all/plots7.json", "json", addData);
+  loadJSON("./paths/all/plots8.json", "json", addData);
 
   map = loadImage("images/map-01.png");
 }
@@ -72,7 +75,7 @@ function setup() {
   textSize(24);
   text("Drop in the Ocean", 10, 40);
   // text("Each point is a drop on one da4", 10, 40);
-  slider = createSlider(1, 100, 1);
+  slider = createSlider(1, 1000, 1);
   slider.addClass("slider");
 }
 

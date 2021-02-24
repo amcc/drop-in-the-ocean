@@ -6,14 +6,14 @@ let colourStart = 160;
 let colour = colourStart;
 let colourRange = 60;
 let bigSaturation = 0;
-let littleSaturation = 50;
+let littleSaturation = 0;
 let brightness = 100;
 let bigAlpha = 0.03;
-let littleAlpha = 0.1;
+let littleAlpha = 0.16;
 
 let xPadding = 0;
 let yPadding = 0;
-const yShift = -400;
+const yShift = -600;
 const xShift = -300;
 const imageWidth = 1000;
 const imageHeight = 1000;
@@ -80,6 +80,7 @@ function setup() {
 }
 
 function draw() {
+  // background(0, 0.0001);
   if (go) drawPaths();
   speed = slider.value();
 }

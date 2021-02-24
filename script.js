@@ -1,5 +1,6 @@
 let go = false;
 let step = 0;
+let day = 0;
 let path = 0;
 let dotSize = 1;
 let colourStart = 160;
@@ -47,9 +48,11 @@ function preload() {
 function addData(data) {
   paths.push(...shuffle(data.paths));
   go = true;
+  console.log("loaded");
 }
 
 function setup() {
+  console.log("go");
   createCanvas(windowWidth, windowHeight);
   width > height ? (scale = height / maxHeight) : (scale = width / maxWidth);
   xPadding = (width - scale * maxWidth) / 2;
@@ -83,6 +86,11 @@ function draw() {
   // background(0, 0.0001);
   if (go) drawPaths();
   speed = slider.value();
+  fill(0, 0, 5.5);
+  rect(width - width / 4, 0, width / 4, 50);
+  textAlign(RIGHT);
+  fill(255);
+  text("Day " + day, width - 10, 40);
 }
 
 function drawPaths() {
@@ -105,19 +113,25 @@ function drawPaths() {
             thisDot
           );
           step++;
+          day++;
           colour += colourRange / paths[path].points.length;
         }
       }
       // console.log("step ", step);
     } else {
+      paths.splice(path, 1);
       console.log("path is ", path, " and movement length is ", paths.length);
-      if (path <= paths.length) {
+      if (paths.length > 0) {
         step = 0;
         colour = colourStart;
-        path++;
+        paths.length === 1
+          ? (path = 0)
+          : (path = Math.floor(Math.random() * paths.length));
+        // path++;
         // colour += path * 2;
         console.log("colour", colour);
         console.log("path", path);
+        console.log(paths);
       }
     }
   }
@@ -146,3 +160,8 @@ function shuffle(array) {
 
   return array;
 }
+
+//1744738
+//1753381
+//1751513
+//1753565

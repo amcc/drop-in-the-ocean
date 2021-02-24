@@ -58,13 +58,13 @@ function setup() {
 
   // console.log("paths", paths);
   // blendMode(EXCLUSION);
-  image(
-    map,
-    xPadding + xShift,
-    yPadding + yShift,
-    imageWidth * scale,
-    imageHeight * scale
-  );
+  // image(
+  //   map,
+  //   xPadding + xShift,
+  //   yPadding + yShift,
+  //   imageWidth * scale,
+  //   imageHeight * scale
+  // );
 
   // make UI
   fill(255);

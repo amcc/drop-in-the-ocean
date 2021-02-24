@@ -4,8 +4,10 @@ let path = 0;
 let dotSize = 1;
 let colourStart = 160;
 let colour = colourStart;
+let CMY = ["red", "green", "blue"];
+let currentCMY = 0;
 let colourRange = 60;
-let bigSaturation = 0;
+let bigSaturation = 100;
 let littleSaturation = 50;
 let brightness = 100;
 let bigAlpha = 0.03;
@@ -44,6 +46,7 @@ function preload() {
 function addData(data) {
   paths.push(...shuffle(data.paths));
   go = true;
+  console.log("waaa", paths);
 }
 
 function setup() {
@@ -51,8 +54,9 @@ function setup() {
   width > height ? (scale = height / maxHeight) : (scale = width / maxWidth);
   xPadding = (width - scale * maxWidth) / 2;
   yPadding = (height - scale * maxHeight) / 2;
-  colorMode(HSB);
-  background(0, 0, 5.5);
+  // colorMode(HSB);
+  blendMode(ADD);
+  background(5);
   noStroke();
   frameRate(60);
 
@@ -88,13 +92,13 @@ function drawPaths() {
       for (let i = 0; i < speed; i++) {
         if (paths[path].points[step]) {
           let thisDot = dotSize;
-          fill(colour, bigSaturation, brightness, bigAlpha);
-          circle(
-            xPadding + paths[path].points[step][0] * scale + xShift,
-            yPadding + paths[path].points[step][1] * scale + yShift,
-            thisDot * 3
-          );
-          fill(colour, littleSaturation, brightness, littleAlpha);
+          // fill(currentCMY);
+          // circle(
+          //   xPadding + paths[path].points[step][0] * scale + xShift,
+          //   yPadding + paths[path].points[step][1] * scale + yShift,
+          //   thisDot * 3
+          // );
+          fill(CMY[currentCMY]);
           circle(
             xPadding + paths[path].points[step][0] * scale + xShift,
             yPadding + paths[path].points[step][1] * scale + yShift,
@@ -107,6 +111,7 @@ function drawPaths() {
       // console.log("step ", step);
     } else {
       console.log("path is ", path, " and movement length is ", paths.length);
+      chooseColour();
       if (path <= paths.length) {
         step = 0;
         colour = colourStart;
@@ -122,6 +127,11 @@ function drawPaths() {
 // function windowResized() {
 //   resizeCanvas(windowWidth, windowHeight);
 // }
+
+function chooseColour() {
+  currentCMY < CMY.length - 1 ? currentCMY++ : (currentCMY = 0);
+  console.log("colour", currentCMY);
+}
 
 function shuffle(array) {
   var currentIndex = array.length,

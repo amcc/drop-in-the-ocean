@@ -1,3 +1,6 @@
+// total points to make it a 24 hour movie
+const dayFrameRate = 1904139 / (60 * 60 * 24);
+
 let go = false;
 let step = 0;
 let day = 0;
@@ -14,8 +17,8 @@ let littleAlpha = 0.16;
 
 let xPadding = 0;
 let yPadding = 0;
-const yShift = -600;
-const xShift = -300;
+const yShift = -700;
+const xShift = -700;
 const imageWidth = 1000;
 const imageHeight = 1000;
 const maxWidth = 500;
@@ -23,6 +26,7 @@ const maxHeight = 500;
 let scale = 1;
 let speed = 20;
 let paths = [];
+let loadedPaths = [];
 
 // multiple graphics with text
 // https://github.com/processing/p5.js/wiki/Global-and-instance-mode
@@ -46,21 +50,18 @@ function preload() {
 }
 
 function addData(data) {
-  paths.push(...shuffle(data.paths));
+  loadedPaths.push(...shuffle(data.paths));
   go = true;
-  console.log("loaded");
 }
 
 function setup() {
-  console.log("go");
   createCanvas(windowWidth, windowHeight);
-  width > height ? (scale = height / maxHeight) : (scale = width / maxWidth);
-  xPadding = (width - scale * maxWidth) / 2;
-  yPadding = (height - scale * maxHeight) / 2;
+
   colorMode(HSB);
-  background(0, 0, 5.5);
+
   noStroke();
-  frameRate(60);
+  print("framerate", dayFrameRate);
+  frameRate(dayFrameRate);
 
   // console.log("paths", paths);
   // blendMode(EXCLUSION);
@@ -73,12 +74,9 @@ function setup() {
   // );
 
   // make UI
-  fill(255);
-  textFont("IBM Plex Mono");
-  textSize(24);
-  text("Drop in the Ocean", 10, 40);
+  resetAnimation();
   // text("Each point is a drop on one da4", 10, 40);
-  slider = createSlider(1, 1000, 1);
+  slider = createSlider(1, 107, 1);
   slider.addClass("slider");
 }
 
@@ -94,52 +92,76 @@ function draw() {
 }
 
 function drawPaths() {
-  if (paths[path]) {
-    if (step <= paths[path].points.length - speed) {
-      // text(paths[path].name, 10, 10, 70, 80);
-      for (let i = 0; i < speed; i++) {
-        if (paths[path].points[step]) {
-          let thisDot = dotSize;
-          fill(colour, bigSaturation, brightness, bigAlpha);
-          circle(
-            xPadding + paths[path].points[step][0] * scale + xShift,
-            yPadding + paths[path].points[step][1] * scale + yShift,
-            thisDot * 3
-          );
-          fill(colour, littleSaturation, brightness, littleAlpha);
-          circle(
-            xPadding + paths[path].points[step][0] * scale + xShift,
-            yPadding + paths[path].points[step][1] * scale + yShift,
-            thisDot
-          );
-          step++;
-          day++;
-          colour += colourRange / paths[path].points.length;
-        }
+  if (step < paths[path].points.length) {
+    if (step === 0) {
+      fill(0, 0, 5.5);
+      rect(width - width / 4, height - 80, width / 4, 100);
+      textAlign(RIGHT);
+      fill(255);
+      text(
+        paths[path].name.substring(paths[path].name.indexOf(".") + 1),
+        width - 10,
+        height - 40
+      );
+    }
+
+    let loopLength =
+      step + speed < paths[path].points.length
+        ? speed
+        : paths[path].points.length - step;
+    for (let i = 0; i < loopLength; i++) {
+      if (paths[path].points[step]) {
+        let thisDot = dotSize;
+        fill(colour, bigSaturation, brightness, bigAlpha);
+        circle(
+          xPadding + paths[path].points[step][0] * scale + xShift,
+          yPadding + paths[path].points[step][1] * scale + yShift,
+          thisDot * 3
+        );
+        fill(colour, littleSaturation, brightness, littleAlpha);
+        circle(
+          xPadding + paths[path].points[step][0] * scale + xShift,
+          yPadding + paths[path].points[step][1] * scale + yShift,
+          thisDot
+        );
+        step++;
+        day++;
+        colour += colourRange / paths[path].points.length;
       }
-      // console.log("step ", step);
+    }
+    // console.log("step ", step);
+  } else {
+    // console.log("path is ", path, " and movement length is ", paths.length);
+    if (path < paths.length - 1) {
+      step = 0;
+      colour = colourStart;
+      path++;
     } else {
-      paths.splice(path, 1);
-      console.log("path is ", path, " and movement length is ", paths.length);
-      if (paths.length > 0) {
-        step = 0;
-        colour = colourStart;
-        paths.length === 1
-          ? (path = 0)
-          : (path = Math.floor(Math.random() * paths.length));
-        // path++;
-        // colour += path * 2;
-        console.log("colour", colour);
-        console.log("path", path);
-        console.log(paths);
-      }
+      resetAnimation();
     }
   }
 }
 
-// function windowResized() {
-//   resizeCanvas(windowWidth, windowHeight);
-// }
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  resetAnimation();
+}
+
+function resetAnimation() {
+  width > height ? (scale = height / maxHeight) : (scale = width / maxWidth);
+  xPadding = (width - scale * maxWidth) / 2;
+  yPadding = (height - scale * maxHeight) / 2;
+  day = 0;
+  paths = shuffle(loadedPaths);
+  path = 0;
+  const total = paths.reduce((acc, path) => acc + path.points.length, 0);
+  console.log("total number of days", total);
+  background(0, 0, 5.5);
+  fill(255);
+  textFont("IBM Plex Mono");
+  textSize(24);
+  text("Drop in the Ocean", 10, 40);
+}
 
 function shuffle(array) {
   var currentIndex = array.length,

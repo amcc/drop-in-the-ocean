@@ -160,7 +160,7 @@ function resetAnimation() {
   fill(255);
   textFont("IBM Plex Mono");
   textSize(24);
-  text("Gulfstream", 10, 40);
+  text("Gulf Stream", 10, 40);
 }
 
 function shuffle(array) {
